@@ -8,16 +8,20 @@ class Deck extends Component {
 
   render() {
     const { navigation } = this.props;
-    
-    const numberOfCards = navigation.state.params.numberOfCards;
-    const title = navigation.state.params.title;
-    
-    console.log('ITEM', item)
-    const title = item && item.title
+    const { deck } = navigation.state.params
+    const numberCards = deck.questions.length
+
+    console.log('ITEM', deck.title)
+
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>{title}</Text>
-        <Text style={styles.text}>{numberOfCards}</Text>
+        <Text style={styles.text}>{deck.title}</Text>
+        <Text style={styles.text}>{`${numberCards} Cards `}</Text>
+        <Button
+          onPress={() => this.props.navigation.navigate('AddCard', {title: deck.title})}
+          title="Add Card"
+          color="#841584"
+        />
       </View>
     )
   }

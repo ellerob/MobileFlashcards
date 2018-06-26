@@ -14,13 +14,10 @@ class Decks extends Component {
   }
 
   renderItem = ({ item }) => { 
-    numberCards=item.questions.length
+    const numberCards=item.questions.length
     return(
       <TouchableOpacity onPress={() =>
-        this.props.navigation.navigate('Deck', {
-          title=item.title,
-          numberCards,
-      })}>
+        this.props.navigation.navigate('Deck', {deck: item},  )}>
       <View style = {styles.itemContainer}>
         <Text>{item.title}</Text>
         <Text>{`${numberCards} Cards `}</Text>

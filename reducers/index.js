@@ -1,4 +1,4 @@
-import { ADD_DECK, RECIEVE_DECKS } from '../actions'
+import { ADD_DECK, RECIEVE_DECKS, ADD_CARD } from '../actions'
 
 // const initialState = {
 //   React: {
@@ -37,8 +37,15 @@ const decks = (state = {}, action) => {
         ...state,
         [action.payload]: {
           title: action.payload,
-          numberOfCards: 0,
           questions: [],
+        }
+      }
+    case ADD_CARD :
+      return {
+        ...state,
+        [action.payload.title]: {
+          title: action.payload.title,
+          questions: [action.payload.card]
         }
       }
     default :

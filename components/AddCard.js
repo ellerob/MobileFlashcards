@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
 import { connect } from 'react-redux';
-import { addDeck } from '../actions';
-import { saveDeckTitle } from '../utils/api'
+import { addCard } from '../actions';
+import { addCardToDeck } from '../utils/api'
 
 class AddCard extends Component {
   state = {
@@ -11,25 +11,29 @@ class AddCard extends Component {
   }
 
   onSubmit() {
+    const { navigation } = this.props;
     const { question, answer } = this.state;
+    const { title } = navigation.state.params
     const card = {
       question,
       answer
     }
-    this.props.addDeck(card)
-    saveDeckTitle(title)
+    const updatedQuestions = {card, title}
+    this.props.addCard(updatedQuestions)
+    addCardToDeck(title, question, answer)
+  
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>question</Text>
+        <Text style={styles.text}>Question</Text>
         <TextInput
         style={styles.textInput}
         onChangeText={(question) => this.setState({question})}
         value={this.state.question}
         />
-        <Text style={styles.text}>answer</Text>
+        <Text style={styles.text}>Answer</Text>
         <TextInput
         style={styles.textInput}
         onChangeText={(answer) => this.setState({answer})}
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    addDeck: (title) => dispatch(addDeck(title))
+    addCard: (data) => dispatch(addCard(data))
   }
 }
 export default connect(

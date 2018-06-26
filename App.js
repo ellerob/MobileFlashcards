@@ -30,7 +30,11 @@ const Stack = createStackNavigator({
   },
   Deck: {
     screen: Deck,
-    navigationOptions: {title: 'Deck', headerTintColor: '#8FBC8F',},
+    navigationOptions: {title: 'Deck', headerTintColor: '#8FBC8F'},
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: {title: 'AddCard', headerTintColor: '#8FBC8F'},
   }
 })
 
