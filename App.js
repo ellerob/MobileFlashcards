@@ -13,6 +13,7 @@ import Deck from './components/Deck'
 
 
 const store = createStore(reducer, devToolsEnhancer());
+ 
 
 const Tabs = createBottomTabNavigator({
   Decks: {
@@ -34,7 +35,7 @@ const Stack = createStackNavigator({
   },
   AddCard: {
     screen: AddCard,
-    navigationOptions: {title: 'AddCard', headerTintColor: '#8FBC8F'},
+    navigationOptions: {title: 'Add Card', headerTintColor: '#8FBC8F'},
   }
 })
 

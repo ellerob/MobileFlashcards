@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button } from 'react-native'
 import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation';
 import { recieveDecks } from '../actions';
-import { fetchDecks } from '../utils/api'
+import { getDecks, clear } from '../utils/api'
 
 class Decks extends Component {
 
   componentDidMount() {
-    fetchDecks()
+    getDecks()
       .then(decks => this.props.recieveDecks(decks))
       .catch(console.log('ERROR'))
   }
@@ -17,10 +17,15 @@ class Decks extends Component {
     const numberCards=item.questions.length
     return(
       <TouchableOpacity onPress={() =>
-        this.props.navigation.navigate('Deck', {deck: item},  )}>
+        this.props.navigation.navigate('Deck', {deck: item})}>
       <View style = {styles.itemContainer}>
         <Text>{item.title}</Text>
         <Text>{`${numberCards} Cards `}</Text>
+        <Button
+          onPress={() => clear()}
+          title="Delete"
+          color="#841584"
+        />
       </View>
     </TouchableOpacity>
     )
@@ -28,8 +33,6 @@ class Decks extends Component {
   
   render() {
     const { decks } = this.props;
-    
-    console.log('DECKS', decks)
     return (
       <View styles = {styles.container}>
         <FlatList
@@ -59,7 +62,6 @@ const styles = StyleSheet.create({
 )
 
 function mapStatetoProps(state) {
-  console.log('STATE', state)
   return {
     decks: state,
   }

@@ -1,24 +1,45 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
 import { connect } from 'react-redux';
-import { addDeck } from '../actions';
-import { saveDeckTitle } from '../utils/api'
+import { recieveDeck } from '../actions';
+import { getDeck, clear } from '../utils/api'
 
 class Deck extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      deck: undefined
+    }
+  }
+
+  
+   componentDidMount() {
+    const title = this.props.navigation.state.params.deck.title
+    getDeck(title)
+      .then(deck => this.setState({deck}))
+    
+  }
+
+  onButtonPress() {
+    const { deck } = this.state;
+    this.props.navigation.navigate('AddCard', {deck: deck})
+  }
 
   render() {
-    const { navigation } = this.props;
-    const { deck } = navigation.state.params
+    if(!this.state.deck) return null;
+
+    const {
+      deck,
+    } = this.state;
+
     const numberCards = deck.questions.length
-
-    console.log('ITEM', deck.title)
-
+    
     return (
       <View style={styles.container}>
         <Text style={styles.text}>{deck.title}</Text>
         <Text style={styles.text}>{`${numberCards} Cards `}</Text>
         <Button
-          onPress={() => this.props.navigation.navigate('AddCard', {title: deck.title})}
+          onPress={() => this.onButtonPress()}
           title="Add Card"
           color="#841584"
         />
@@ -51,11 +72,16 @@ const styles = StyleSheet.create({
   }
 })
 
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     addDeck: (title) => dispatch(addDeck(title))
-//   }
-// }
-export default Deck;
+function mapStateToProps (state) {
+  return {
+      deck: state.deck
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    recieveDeck: (deck) => dispatch(recieveDeck(deck))
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Deck);
 
 

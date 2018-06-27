@@ -13,15 +13,15 @@ class AddCard extends Component {
   onSubmit() {
     const { navigation } = this.props;
     const { question, answer } = this.state;
-    const { title } = navigation.state.params
+    const title= navigation.state.params.deck.title
     const card = {
       question,
       answer
     }
     const updatedQuestions = {card, title}
     this.props.addCard(updatedQuestions)
-    addCardToDeck(title, question, answer)
-  
+    addCardToDeck(title, card)
+    this.setState({ question: '', answer: ''})
   }
 
   render() {

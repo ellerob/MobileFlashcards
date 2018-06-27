@@ -1,5 +1,7 @@
 export const ADD_DECK = 'ADD_DECK'
 export const RECIEVE_DECKS = 'RECIEVE_DECKS'
+export const RECIEVE_DECK = 'RECIEVE_DECK'
+export const DELETE_DECK = 'DELETE_DECK'
 export const ADD_CARD = 'ADD_CARD'
 
 export const addDeck = title => ({
@@ -7,12 +9,18 @@ export const addDeck = title => ({
   payload: title
 })
 
-export const recieveDecks = decks => ({
-  type: RECIEVE_DECKS,
-  payload: decks
+export const deleteDeck = deck => ({
+  type: ADD_DECK,
+  payload: deck
 })
 
 export const addCard = data => ({
   type: ADD_CARD,
   payload: data
 })
+
+export const recieveDecks = decks => ({
+  type: RECIEVE_DECKS,
+  payload: decks
+})
+
