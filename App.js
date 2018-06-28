@@ -10,6 +10,7 @@ import AddDeck from './components/AddDeck'
 import AddCard from './components/AddCard'
 import Decks from './components/Decks'
 import Deck from './components/Deck'
+import Quiz from './components/Quiz'
 
 
 const store = createStore(reducer, devToolsEnhancer());
@@ -36,7 +37,12 @@ const Stack = createStackNavigator({
   AddCard: {
     screen: AddCard,
     navigationOptions: {title: 'Add Card', headerTintColor: '#8FBC8F'},
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: {title: 'Quiz', headerTintColor: '#8FBC8F'}
   }
+
 })
 
 export default class App extends React.Component {

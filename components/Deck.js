@@ -39,6 +39,12 @@ class Deck extends Component {
         <Text style={styles.text}>{deck.title}</Text>
         <Text style={styles.text}>{`${numberCards} Cards `}</Text>
         <Button
+          onPress={() =>
+            this.props.navigation.navigate('Quiz', {questions: deck.questions})}
+          title="Quiz"
+          color="#841584"
+        />
+        <Button
           onPress={() => this.onButtonPress()}
           title="Add Card"
           color="#841584"
