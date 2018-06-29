@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert
 } from 'react-native';
+import { clearLocalNotification, setLocalNotification } from '../utils/api'
 
 class Quiz extends Component {
 
@@ -81,10 +82,8 @@ class Quiz extends Component {
     }
 
     const questions = this.props.navigation.state.params.questions || null
-    console.log('QUESTIONS', questions)
 
     if (questions.length === 0) return null
-
 
     const question = questions && Object.values(questions)[this.state.currentQuestionId]
     const isLastCard = (this.state.currentQuestionId + 1) === questions.length;
@@ -128,7 +127,7 @@ class Quiz extends Component {
             }
             {
               !isLastCard && (
-                <Button
+                <Button style={styles.button}
                   onPress={() => this.flipCardBack()}
                   title="Next Question"
                   color="#841584"
@@ -137,7 +136,8 @@ class Quiz extends Component {
             }
             {
               isLastCard && (
-                console.log('CORRECTEND', this.state.correctQuestions),
+                clearLocalNotification()
+                  .then(setLocalNotification),
                 Alert.alert(
                   'End of Quiz',
                   `You got ${this.state.correctQuestions} questions correct out of ${questions.length}`,
@@ -169,25 +169,24 @@ const styles = StyleSheet.create({
     height: 350,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'blue',
+    backgroundColor: '#ABEBC6',
     backfaceVisibility: 'hidden',
   },
   flipCardBack: {
-    backgroundColor: 'red',
+    backgroundColor: '#AED6F1',
     backfaceVisibility: 'hidden',
     top: 0,
   },
   flipText: {
-    width: 100,
+    width: 200,
     fontSize: 20,
     alignItems: 'center',
     justifyContent: 'center',
     color: 'white',
     fontWeight: 'bold',
-    
   }
 });
 
 export default Quiz;
 
-// https://github.com/browniefed/examples/blob/animated_basic/flip/animatedbasic/index.ios.js
+// reference to https://github.com/browniefed/examples/blob/animated_basic/flip/animatedbasic/index.ios.js for flip animation
