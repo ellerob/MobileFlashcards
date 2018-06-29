@@ -13,7 +13,7 @@ class AddCard extends Component {
   onSubmit() {
     const { navigation } = this.props;
     const { question, answer } = this.state;
-    const title= navigation.state.params.deck.title
+    const title = navigation.state.params.deck.title
     const card = {
       question,
       answer
@@ -29,15 +29,15 @@ class AddCard extends Component {
       <View style={styles.container}>
         <Text style={styles.text}>Question</Text>
         <TextInput
-        style={styles.textInput}
-        onChangeText={(question) => this.setState({question})}
-        value={this.state.question}
+          style={styles.textInput}
+          onChangeText={(question) => this.setState({question})}
+          value={this.state.question}
         />
         <Text style={styles.text}>Answer</Text>
         <TextInput
-        style={styles.textInput}
-        onChangeText={(answer) => this.setState({answer})}
-        value={this.state.answer}
+          style={styles.textInput}
+          onChangeText={(answer) => this.setState({answer})}
+          value={this.state.answer}
         />
         <Button
           onPress={(e) => this.onSubmit(e)}

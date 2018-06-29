@@ -1,4 +1,4 @@
-import { ADD_DECK, RECIEVE_DECKS, ADD_CARD, RECIEVE_DECK } from '../actions'
+import { ADD_DECK, RECIEVE_DECKS, ADD_CARD, GET_DECK } from '../actions'
 
 // const initialState = {
 //   React: {
@@ -27,7 +27,8 @@ import { ADD_DECK, RECIEVE_DECKS, ADD_CARD, RECIEVE_DECK } from '../actions'
 
 const decks = (state = {}, action) => {
   switch (action.type) {
-    case RECIEVE_DECKS :
+    case RECIEVE_DECKS:
+    case GET_DECK:
       return {
         ...state,
         ...action.payload

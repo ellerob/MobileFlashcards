@@ -4,11 +4,24 @@ import {
   StyleSheet,
   Text,
   View,
-  Animated, 
-  Button
+  Animated,
+  Button,
+  TextInput,
+  Alert
 } from 'react-native';
 
 class Quiz extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentQuestionId: 0,
+      userAnswer: '',
+      isFront: true,
+      correct: null,
+      correctQuestions: 0
+    }
+  }
 
   componentWillMount() {
     this.animatedValue = new Animated.Value(0);
@@ -26,8 +39,15 @@ class Quiz extends Component {
     })
   }
 
+  flipCard(answer) {
+    this.setState({ isFront: !this.state.isFront })
 
-  flipCard() {
+    if (this.state.userAnswer === answer) {
+      this.setState({ correct: true, correctQuestions: this.state.correctQuestions +1 })
+    } else {
+      this.setState({ correct: false })
+    }
+
     if (this.value >= 90) {
       Animated.spring(this.animatedValue, {
         toValue: 0,
@@ -43,6 +63,11 @@ class Quiz extends Component {
     }
   }
 
+  flipCardBack() {
+    this.flipCard()
+    this.setState({ currentQuestionId: this.state.currentQuestionId + 1, userAnswer: '' })
+  }
+
   render() {
     const frontAnimatedStyle = {
       transform: [
@@ -54,39 +79,77 @@ class Quiz extends Component {
         { rotateY: this.backInterpolate }
       ]
     }
-    
-    const questions = Object.values(this.props.navigation.state.params)
-    console.log('Q', questions)
+
+    const questions = this.props.navigation.state.params.questions || null
+    console.log('QUESTIONS', questions)
+
+    if (questions.length === 0) return null
+
+
+    const question = questions && Object.values(questions)[this.state.currentQuestionId]
+    const isLastCard = (this.state.currentQuestionId + 1) === questions.length;
 
     return (
       <View style={styles.container}>
-      {questions.map(question => (
-
-        <View>
-          {...console.log('QUESTION',question)}
-          <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-            <Text style={styles.flipText}>
-              {question.question}
-            </Text>
-            <Button
-              onPress={() => this.flipCard()}
-              title="Submit"
-              color="#841584"
-            />
+        {this.state.isFront &&
+          <Animated.View style={[frontAnimatedStyle, styles.flipCard]}>
+            <View>
+              <Text style={styles.flipText}>
+                {`Question ${question.question}`}
+              </Text>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Enter answer"
+                onChangeText={(userAnswer) => this.setState({ userAnswer })}
+                value={this.state.userAnswer}
+              />
+              <Button
+                onPress={() => this.flipCard(question.answer)}
+                title="Submit"
+                color="#841584"
+              />
+            </View>
           </Animated.View>
+        }
+        {!this.state.isFront &&
           <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
             <Text style={styles.flipText}>
-              {question.amswer}
+              {`Answer ${question.question}`}
             </Text>
-            <Button
-              onPress={() => this.flipCard()}
-              title="Next Question"
-              color="#841584"
-            />
+            {
+              this.state.correct && (
+                <Text>Well done!</Text>
+              )
+            }
+            {
+              !this.state.correct && (
+                <Text>Incorrect</Text>
+              )
+            }
+            {
+              !isLastCard && (
+                <Button
+                  onPress={() => this.flipCardBack()}
+                  title="Next Question"
+                  color="#841584"
+                />
+              )
+            }
+            {
+              isLastCard && (
+                console.log('CORRECTEND', this.state.correctQuestions),
+                Alert.alert(
+                  'End of Quiz',
+                  `You got ${this.state.correctQuestions} questions correct out of ${questions.length}`,
+                  [
+                    { text: 'Back to Home', onPress: () => this.props.navigation.navigate('Home')},
+                  ],
+                  { cancelable: false }
+                )
+              )
+            }
           </Animated.View>
-        </View>
-        ))}
-
+        }
       </View>
     );
   }
@@ -94,9 +157,12 @@ class Quiz extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
+    height: 1000
   },
   flipCard: {
     width: 300,
@@ -107,15 +173,18 @@ const styles = StyleSheet.create({
     backfaceVisibility: 'hidden',
   },
   flipCardBack: {
-    backgroundColor: "red",
-    position: "absolute",
+    backgroundColor: 'red',
+    backfaceVisibility: 'hidden',
     top: 0,
   },
   flipText: {
-    width: 90,
+    width: 100,
     fontSize: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
     color: 'white',
     fontWeight: 'bold',
+    
   }
 });
 

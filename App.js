@@ -13,7 +13,7 @@ import Deck from './components/Deck'
 import Quiz from './components/Quiz'
 
 
-const store = createStore(reducer, devToolsEnhancer());
+export const store = createStore(reducer, devToolsEnhancer());
  
 
 const Tabs = createBottomTabNavigator({

@@ -1,51 +1,40 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
 import { connect } from 'react-redux';
-import { recieveDeck } from '../actions';
-import { getDeck, clear } from '../utils/api'
+import { withNavigation } from 'react-navigation';
 
 class Deck extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      deck: undefined
-    }
-  }
 
-  
-   componentDidMount() {
-    const title = this.props.navigation.state.params.deck.title
-    getDeck(title)
-      .then(deck => this.setState({deck}))
-    
-  }
-
-  onButtonPress() {
-    const { deck } = this.state;
-    this.props.navigation.navigate('AddCard', {deck: deck})
+  onButtonPress(thisDeck) {
+    console.log(thisDeck)
+    this.props.navigation.navigate('AddCard', {deck: thisDeck})
   }
 
   render() {
-    if(!this.state.deck) return null;
+    if(this.props.decks === null) return null;
+    const title = this.props.navigation.state.params.title
+    console.log('TITLE', title)
+    const decks = Object.values(this.props.decks)
+    decks.map(deck => {
+      if (deck.title === title) {
+        thisDeck = deck
+      }
+    })
 
-    const {
-      deck,
-    } = this.state;
-
-    const numberCards = deck.questions.length
+    const numberCards = thisDeck.questions.length
     
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>{deck.title}</Text>
+        <Text style={styles.text}>{thisDeck.title}</Text>
         <Text style={styles.text}>{`${numberCards} Cards `}</Text>
         <Button
           onPress={() =>
-            this.props.navigation.navigate('Quiz', {questions: deck.questions})}
+            this.props.navigation.navigate('Quiz', {questions: thisDeck.questions})}
           title="Quiz"
           color="#841584"
         />
         <Button
-          onPress={() => this.onButtonPress()}
+          onPress={() => this.onButtonPress(thisDeck)}
           title="Add Card"
           color="#841584"
         />
@@ -78,16 +67,12 @@ const styles = StyleSheet.create({
   }
 })
 
-function mapStateToProps (state) {
+function mapStateToProps (state ) {
   return {
-      deck: state.deck
+      decks: state,
   }
 }
-function mapDispatchToProps(dispatch) {
-  return {
-    recieveDeck: (deck) => dispatch(recieveDeck(deck))
-  }
-}
-export default connect(mapStateToProps,mapDispatchToProps)(Deck);
+
+export default withNavigation(connect(mapStateToProps, null)(Deck));
 
 

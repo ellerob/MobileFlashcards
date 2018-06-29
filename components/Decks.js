@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button } from 'reac
 import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation';
 import { recieveDecks } from '../actions';
-import { getDecks, clear } from '../utils/api'
+import { getDecks } from '../utils/api'
 
 class Decks extends Component {
 
@@ -17,15 +17,10 @@ class Decks extends Component {
     const numberCards=item.questions.length
     return(
       <TouchableOpacity onPress={() =>
-        this.props.navigation.navigate('Deck', {deck: item})}>
+        this.props.navigation.navigate('Deck', {title: item.title})}>
       <View style = {styles.itemContainer}>
         <Text>{item.title}</Text>
         <Text>{`${numberCards} Cards `}</Text>
-        <Button
-          onPress={() => clear()}
-          title="Delete"
-          color="#841584"
-        />
       </View>
     </TouchableOpacity>
     )
