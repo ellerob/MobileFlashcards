@@ -143,6 +143,7 @@ class Quiz extends Component {
                   `You got ${this.state.correctQuestions} questions correct out of ${questions.length}`,
                   [
                     { text: 'Back to Home', onPress: () => this.props.navigation.navigate('Home')},
+                    { text: 'Restart Quiz', onPress: () => (this.setState({ currentQuestionId: 0, correctQuestions: 0 }), this.flipCard())},
                   ],
                   { cancelable: false }
                 )
